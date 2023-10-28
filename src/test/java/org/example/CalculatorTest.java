@@ -1,9 +1,18 @@
 package org.example;
 
+
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+
+import org.junit.jupiter.params.ParameterizedTest;
+
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+
+
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 /**요구사항
         • 간단한 사칙연산을 할 수 있다.
@@ -16,19 +25,21 @@ public class CalculatorTest {
     // 1 + 2 -----> Calculator
     //   3   <-----
     @DisplayName("덧샘 연산을 정상적으로 수행한다.")
-    @Test
-    void additionTest() {
+    @ParameterizedTest
+    @MethodSource("formulaAndResult")
+    void calculatorTest(int operand1, String operator,int operand2,int reust) {
 
-        int result = Calculator.claculator(1, "+", 2);
+        int claculatorresult = Calculator.claculator(operand1, operator, operand2);
 
-        assertThat(result).isEqualTo(3);
+        assertThat(claculatorresult).isEqualTo(reust);
     }
-    @DisplayName("뺼샘 연산을 정상적으로 수행한다.")
-    @Test
-    void subtractionTest() {
 
-        int result = Calculator.claculator(1, "-", 2);
-
-        assertThat(result).isEqualTo(-1);
+  private static Stream<Arguments> formulaAndResult() {
+        return Stream.of(
+                arguments(1, "+" ,2,3),
+                arguments(1, "-" ,2,-1),
+                arguments(4, "*" ,2,8),
+                arguments(4, "/" ,2,2)
+        );
     }
 }
