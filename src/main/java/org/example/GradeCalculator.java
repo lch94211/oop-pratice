@@ -3,11 +3,11 @@ package org.example;
 import java.util.List;
 
 public class GradeCalculator {
+    private final Courses courses;
 
-    private final List<Course> courses;
 
     public GradeCalculator(List<Course> courses) {
-        this.courses = courses;
+        this.courses = new Courses(courses);
     }
 
     /**
@@ -18,18 +18,14 @@ public class GradeCalculator {
      */
     public double calculateGrade() {
         // ( 학점수 * 교과목 평점 )의 합계
-        double multipliedCreditAndCourseGrade = 0;
-        for (Course course : courses) {
-            multipliedCreditAndCourseGrade += course.getCredit() * course.getGradeToNumber();
-        }
+        double totalMultipliedCreditAndCourseGrade =  courses.multiplyCreditAndCourseGrade();
+
 
         // 수강신청 총학점 수
+       int totalCompletedCredit = courses.calculateTotalCompletedCredit();
 
-        int totalCompletedCredit = courses.stream()
-                .mapToInt(Course::getCredit)
-                .sum();
 
-        return multipliedCreditAndCourseGrade / totalCompletedCredit ;
+        return totalMultipliedCreditAndCourseGrade / totalCompletedCredit ;
 
     }
 }
